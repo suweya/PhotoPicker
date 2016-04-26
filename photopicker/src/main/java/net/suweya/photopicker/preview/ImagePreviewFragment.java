@@ -52,10 +52,10 @@ public class ImagePreviewFragment extends Fragment {
 
         if (images != null) {
             final int imageCount = images.size();
-            mViewPager.setAdapter(new ImagePreviewAdapter(images));
+            mViewPager.setAdapter(new ImagePreviewAdapter(getChildFragmentManager(), images));
             int currentItem = getArguments().getInt(CURRENT_ITEM);
             mViewPager.setCurrentItem(currentItem);
-            mImagePreviewActivity.setTitle(currentItem + "/" + imageCount);
+            mImagePreviewActivity.setTitle((currentItem+1) + "/" + imageCount);
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -63,7 +63,7 @@ public class ImagePreviewFragment extends Fragment {
 
                 @Override
                 public void onPageSelected(int position) {
-                    mImagePreviewActivity.setTitle(position + "/" + imageCount);
+                    mImagePreviewActivity.setTitle((position+1) + "/" + imageCount);
                 }
 
                 @Override

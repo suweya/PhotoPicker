@@ -6,11 +6,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 
 import net.suweya.photopicker.base.BaseFragment;
@@ -49,6 +51,7 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
     private View mPopupAnchorView;
     private Button mPreviewButton;
     private View mBackgroundView;
+    private Button mCategoryButtton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,7 +72,8 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
 
         mBackgroundView = view.findViewById(R.id.background);
 
-        view.findViewById(R.id.category_btn).setOnClickListener(new View.OnClickListener() {
+        mCategoryButtton = (Button) view.findViewById(R.id.category_btn);
+        mCategoryButtton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showFolderPickerPop();
@@ -79,7 +83,8 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
         mPreviewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                SparseBooleanArray array = ((PhotoPickerAdapter)mRecyclerView.getAdapter()).getCheckedArray();
+                ImagePreviewActivity.start(getContext(), array);
             }
         });
         return view;
@@ -131,11 +136,23 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
             createPopupFolderList(mPresenter.fetchFolderData());
             mBackgroundView.setVisibility(View.VISIBLE);
             mFolderPopupWindow.show();
+            mFolderPopupWindow.getListView().setSelector(android.R.color.transparent);
         } else if (mFolderPopupWindow.isShowing()){
             mFolderPopupWindow.dismiss();
         } else {
             mBackgroundView.setVisibility(View.VISIBLE);
             mFolderPopupWindow.show();
+            ListView listView = mFolderPopupWindow.getListView();
+            int position = ((FolderAdapter)listView.getAdapter()).getSelectedPosition();
+            position = position == 0 ? position : (position - 1);
+            listView.setSelection(position);
+        }
+    }
+
+    @Override
+    public void changeGalleryName(String categoryName) {
+        if (mCategoryButtton != null) {
+            mCategoryButtton.setText(categoryName);
         }
     }
 

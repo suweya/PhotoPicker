@@ -56,7 +56,7 @@ public class GalleryUtils {
                         File file = new File(path);
 
                         if (file.exists()) {
-                            Image image = new Image(path, name, dateAdded);
+                            Image image = new Image(cursor.getPosition(), path, name, dateAdded);
                             images.add(image);
 
                             if (!hasSetAllImageFolder) {

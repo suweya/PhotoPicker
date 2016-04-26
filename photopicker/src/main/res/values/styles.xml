@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ImagePreviewTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--<item name="android:background">@drawable/image_loading_placeholder</item>-->
+    </style>
+
+    <style name="Toolbar">
+        <item name="colorAccent">@android:color/white</item>
+    </style>
+
+</resources>

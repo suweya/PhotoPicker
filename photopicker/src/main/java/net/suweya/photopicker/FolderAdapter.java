@@ -33,6 +33,10 @@ public class FolderAdapter extends BaseAdapter {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    public int getSelectedPosition() {
+        return mSelectedPosition;
+    }
+
     @Override
     public int getCount() {
         return mFolders.size();

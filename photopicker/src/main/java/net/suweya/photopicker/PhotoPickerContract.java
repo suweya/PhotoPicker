@@ -33,6 +33,8 @@ public interface PhotoPickerContract {
         void showFilterGallery(ArrayList<Image> images, boolean showCameraGrid);
 
         void showFolderPickerPop();
+
+        void changeGalleryName(String categoryName);
     }
 
     interface Model {

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +37,11 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<ViewHolder>
     private ArrayList<Image> mImages;
     private LayoutInflater mLayoutInflater;
     private boolean mShowCameraGrid;
-    private int mSelectedCount;
+    //private int mSelectedCount;
     private PhotoCheckListener mPhotoCheckListener;
+
+    //选中记录
+    private SparseBooleanArray mCheckedArray = new SparseBooleanArray();
 
     public PhotoPickerAdapter(@NonNull Context context,
                               @NonNull  ArrayList<Image> images,
@@ -99,12 +103,27 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<ViewHolder>
             ((AppCompatCheckBox) v).setChecked(value);
             image.selected = value;
 
-            mSelectedCount = value ? mSelectedCount+1 : mSelectedCount-1;
-            mPhotoCheckListener.onPhotoCheck(mSelectedCount);
+            //mSelectedCount = value ? mSelectedCount+1 : mSelectedCount-1;
+
+            if (value) {
+                mCheckedArray.put(image.position, true);
+            } else {
+                mCheckedArray.delete(image.position);
+            }
+
+            mPhotoCheckListener.onPhotoCheck(mCheckedArray.size());
+
         } else if (v.getId() == R.id.item_view) {
             int position = (int) v.getTag();
             mPhotoCheckListener.onItemViewClick(mImages, position);
         }
+    }
+
+    public SparseBooleanArray getCheckedArray() {
+        if (mCheckedArray.size() > 0) {
+            return mCheckedArray;
+        }
+        return null;
     }
 
     @Override

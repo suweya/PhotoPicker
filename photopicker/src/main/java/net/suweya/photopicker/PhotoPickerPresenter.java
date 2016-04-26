@@ -75,6 +75,7 @@ public class PhotoPickerPresenter implements PhotoPickerContract.Presenter {
         if (mFolders != null) {
             mView.showFilterGallery(mFolders.get(position).images,
                     position == DEFAULT_CAMERA_GRID_POSITION);
+            mView.changeGalleryName(mFolders.get(position).name);
         }
     }
 }

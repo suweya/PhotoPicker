@@ -8,13 +8,15 @@ import net.suweya.photopicker.util.Objects;
  */
 public class Image {
 
+    public int position;
     public String path;
     public String name;
     public long time;
 
     public boolean selected = false;
 
-    public Image(String path, String name, long time){
+    public Image(int position, String path, String name, long time) {
+        this.position = position;
         this.path = path;
         this.name = name;
         this.time = time;
