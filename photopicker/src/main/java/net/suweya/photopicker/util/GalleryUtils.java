@@ -3,6 +3,7 @@ package net.suweya.photopicker.util;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -21,6 +22,10 @@ import java.util.LinkedHashMap;
 public class GalleryUtils {
 
     public static final String ALL_IMAGE = "all-image";
+    public static final String MIME_TYPE_IAMGE_GIF = "image/gif";
+    public static final String MIME_TYPE_IAMGE_JPEG = "image/jpeg";
+    public static final String MIME_TYPE_IAMGE_PNG = "image/png";
+    public static final String MIME_TYPE_IAMGE_JPG = "image/jpg";
 
     public static GalleryBundle getAllGalleryImage(@NonNull Context context) {
         final String[] IMAGE_PROJECTION = {
@@ -32,8 +37,12 @@ public class GalleryUtils {
                 MediaStore.Images.Media._ID };
 
         Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        String selection = IMAGE_PROJECTION[4]+">0 AND "+IMAGE_PROJECTION[3]+"=? OR "+IMAGE_PROJECTION[3]+"=? ";
-        String [] selectionArgs = new String[]{"image/jpeg", "image/png"};
+        String selection = IMAGE_PROJECTION[4]+">0 AND "+
+                IMAGE_PROJECTION[3]+"=? OR " +
+                IMAGE_PROJECTION[3]+"=? OR " +
+                IMAGE_PROJECTION[3]+"=? OR " +
+                IMAGE_PROJECTION[3]+"=?";
+        String [] selectionArgs = new String[]{MIME_TYPE_IAMGE_GIF, MIME_TYPE_IAMGE_JPEG, MIME_TYPE_IAMGE_JPG, MIME_TYPE_IAMGE_PNG};
         String sortOrder = IMAGE_PROJECTION[2] + " DESC";
 
         Cursor cursor = context.getContentResolver().query(uri, IMAGE_PROJECTION, selection, selectionArgs, sortOrder);
@@ -42,7 +51,10 @@ public class GalleryUtils {
             ArrayList<Image> images = new ArrayList<>(cursor.getCount());
             LinkedHashMap<String, Folder> folderMap = new LinkedHashMap<>();
 
-            System.out.println("getAllGalleryImage: currentThread = " + Thread.currentThread().getName());
+            if (Looper.myLooper() == Looper.getMainLooper()) {
+                //ui thread throw error
+                throw new IllegalStateException("Get Data In UI Thread Error");
+            }
 
             boolean hasSetAllImageFolder = false;
 
@@ -51,12 +63,15 @@ public class GalleryUtils {
                     String path = cursor.getString(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
                     String name = cursor.getString(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[1]));
                     long dateAdded = cursor.getLong(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[2]));
+                    String mimeType = cursor.getString(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[3]));
 
                     if (!TextUtils.isEmpty(path)) {
                         File file = new File(path);
 
                         if (file.exists()) {
-                            Image image = new Image(cursor.getPosition(), path, name, dateAdded);
+                            boolean isGif = MIME_TYPE_IAMGE_GIF.equals(mimeType);
+                            Image.TYPE type = isGif ? Image.TYPE.GIF : Image.TYPE.IMAGE;
+                            Image image = new Image(cursor.getPosition(), path, name, dateAdded, type);
                             images.add(image);
 
                             if (!hasSetAllImageFolder) {

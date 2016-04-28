@@ -1,6 +1,6 @@
 package net.suweya.photopicker.preview;
 
-import android.util.SparseBooleanArray;
+import android.os.Bundle;
 
 import net.suweya.photopicker.ImageData;
 import net.suweya.photopicker.entity.Image;
@@ -13,22 +13,35 @@ import java.util.ArrayList;
  */
 public class ImagePreviewPresenter implements ImagePreviewContract.Presenter {
 
+    private ImagePreviewContract.View mView;
+
+    public ImagePreviewPresenter(ImagePreviewContract.View view) {
+        mView = view;
+    }
+
     @Override
-    public ArrayList<Image> filterCheckedImageList(SparseBooleanArray checkedArray) {
-        ArrayList<Image> allImages = ImageData.getInstance().getImages();
-        ArrayList<Image> checkedImageList = null;
-        if (allImages != null && checkedArray != null && checkedArray.size() > 0) {
-            final int checkedCount = checkedArray.size();
-            checkedImageList = new ArrayList<>(checkedCount);
-            for (int i = 0; i < checkedCount; i++) {
-                checkedImageList.add(allImages.get(checkedArray.keyAt(i)));
+    public void filterCheckedImageList(Bundle bundle) {
+        ArrayList<Image> allImages = ImageData.getInstance().getAllImages();
+        if (allImages == null || bundle == null) return;
+
+        ArrayList<Integer> selectedList = bundle.getIntegerArrayList(ImagePreviewActivity.KEY_CHECKED_POS_ARRAY);
+
+        ArrayList<Image> data;
+        if (selectedList == null || selectedList.size() == 0) {
+            // all image
+            data = allImages;
+        } else {
+            data = new ArrayList<>(selectedList.size());
+            for (Integer index : selectedList) {
+                data.add(allImages.get(index));
             }
         }
-        return checkedImageList;
+
+        int position = bundle.getInt(ImagePreviewFragment.CURRENT_ITEM);
+        mView.setUpViewPager(data, position);
     }
 
     @Override
     public void unsubscribe() {
-
     }
 }

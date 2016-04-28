@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -15,6 +17,7 @@ import com.bumptech.glide.request.target.Target;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import net.suweya.photopicker.R;
+import net.suweya.photopicker.entity.Image;
 
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
@@ -27,12 +30,14 @@ import uk.co.senab.photoview.PhotoView;
 public class ImageFragment extends Fragment {
 
     private static final String KEY_PATH = "PATH";
+    private static final String KEY_TYPE = "TYPE";
     public static final int ANIMATION_DURATION = 500;
 
-    public static ImageFragment newInstance(String path) {
+    public static ImageFragment newInstance(String path, Image.TYPE type) {
 
         Bundle args = new Bundle();
         args.putString(KEY_PATH, path);
+        args.putInt(KEY_TYPE, type.ordinal());
         
         ImageFragment fragment = new ImageFragment();
         fragment.setArguments(args);
@@ -46,10 +51,19 @@ public class ImageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ft_preview_image, container, false);
 
-        String path = getArguments().getString(KEY_PATH);
+        Bundle bundle = getArguments();
+        String path = bundle.getString(KEY_PATH);
+        int type = bundle.getInt(KEY_TYPE);
 
-        //final View layout = view.findViewById(R.id.layout);
-        final PhotoView photoView = (PhotoView) view.findViewById(R.id.photo_view);
+        final ViewGroup layout = (ViewGroup) view.findViewById(R.id.layout);
+        final ImageView photoView;
+        if (type == Image.TYPE.GIF.ordinal()) {
+            photoView = new ImageView(getContext());
+        } else {
+            photoView = new PhotoView(getContext());
+        }
+        layout.addView(photoView, 0,
+                new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         final CircularProgressView progressView = (CircularProgressView) view.findViewById(R.id.progress_view);
 
         Glide.with(getContext())
@@ -57,6 +71,7 @@ public class ImageFragment extends Fragment {
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        e.printStackTrace();
                         return false;
                     }
 
@@ -70,6 +85,7 @@ public class ImageFragment extends Fragment {
                         return false;
                     }
                 })
+                .error(R.drawable.ic_photo_size_select_actual_black_24dp)
                 .dontAnimate()
                 .into(photoView);
 

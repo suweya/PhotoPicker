@@ -15,10 +15,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.MemoryCategory;
+
 import net.suweya.photopicker.base.BaseFragment;
 import net.suweya.photopicker.entity.Folder;
 import net.suweya.photopicker.entity.Image;
 import net.suweya.photopicker.preview.ImagePreviewActivity;
+import net.suweya.photopicker.util.ArrayUtil;
 import net.suweya.photopicker.util.ScreenUtils;
 import net.suweya.photopicker.widget.GridDividerDecoration;
 
@@ -51,11 +55,13 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
     private View mPopupAnchorView;
     private Button mPreviewButton;
     private View mBackgroundView;
-    private Button mCategoryButtton;
+    private Button mCategoryButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // improve glide memory category
+        Glide.get(getContext()).setMemoryCategory(MemoryCategory.HIGH);
         mShowCameraGrid = getArguments().getBoolean(KEY_SHOW_CAMERA_GRID);
     }
 
@@ -66,14 +72,15 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
         mRecyclerView.addItemDecoration(new GridDividerDecoration(getContext()));
+        mRecyclerView.setHasFixedSize(true);
 
         mPopupAnchorView = view.findViewById(R.id.footer);
         mPreviewButton = (Button) view.findViewById(R.id.preview);
 
         mBackgroundView = view.findViewById(R.id.background);
 
-        mCategoryButtton = (Button) view.findViewById(R.id.category_btn);
-        mCategoryButtton.setOnClickListener(new View.OnClickListener() {
+        mCategoryButton = (Button) view.findViewById(R.id.category_btn);
+        mCategoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showFolderPickerPop();
@@ -84,10 +91,26 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
             @Override
             public void onClick(View v) {
                 SparseBooleanArray array = ((PhotoPickerAdapter)mRecyclerView.getAdapter()).getCheckedArray();
-                ImagePreviewActivity.start(getContext(), array);
+                if (array != null) {
+                    ImagePreviewActivity.start(getContext(), ArrayUtil.asKeyList(array));
+                }
             }
         });
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //局部刷新
+        if (mRecyclerView != null && mRecyclerView.getAdapter() != null) {
+            GridLayoutManager manager = (GridLayoutManager) mRecyclerView.getLayoutManager();
+            int positionStart = manager.findFirstVisibleItemPosition();
+            int itemCount = manager.findLastVisibleItemPosition() - positionStart;
+            PhotoPickerAdapter adapter = (PhotoPickerAdapter) mRecyclerView.getAdapter();
+            adapter.notifyItemRangeChanged(positionStart, itemCount);
+            updatePreviewButton(adapter.getSelectedCount());
+        }
     }
 
     @Override
@@ -98,17 +121,12 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
 
     @Override
     public void showGallery(ArrayList<Image> images) {
+        ImageData.getInstance().setAllImages(images);
         PhotoPickerAdapter adapter = new PhotoPickerAdapter(getContext(), images, mShowCameraGrid,
                 new PhotoPickerAdapter.PhotoCheckListener() {
                     @Override
                     public void onPhotoCheck(int count) {
-                        boolean enable = !(count == 0);
-                        if (enable) {
-                            mPreviewButton.setText(String.format(Locale.CHINA, "预览(%d)", count));
-                        } else {
-                            mPreviewButton.setText("预览");
-                        }
-                        mPreviewButton.setEnabled(enable);
+                        updatePreviewButton(count);
                     }
 
                     @Override
@@ -118,6 +136,16 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
                     }
                 });
         mRecyclerView.setAdapter(adapter);
+    }
+
+    private void updatePreviewButton(int count) {
+        boolean enable = !(count == 0);
+        if (enable) {
+            mPreviewButton.setText(String.format(Locale.CHINA, "预览(%d)", count));
+        } else {
+            mPreviewButton.setText("预览");
+        }
+        mPreviewButton.setEnabled(enable);
     }
 
     @Override
@@ -133,10 +161,7 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
     @Override
     public void showFolderPickerPop() {
         if (mFolderPopupWindow == null) {
-            createPopupFolderList(mPresenter.fetchFolderData());
-            mBackgroundView.setVisibility(View.VISIBLE);
-            mFolderPopupWindow.show();
-            mFolderPopupWindow.getListView().setSelector(android.R.color.transparent);
+            createPopupFolderListAndShow(mPresenter.fetchFolderData());
         } else if (mFolderPopupWindow.isShowing()){
             mFolderPopupWindow.dismiss();
         } else {
@@ -151,8 +176,8 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
 
     @Override
     public void changeGalleryName(String categoryName) {
-        if (mCategoryButtton != null) {
-            mCategoryButtton.setText(categoryName);
+        if (mCategoryButton != null) {
+            mCategoryButton.setText(categoryName);
         }
     }
 
@@ -164,7 +189,9 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
     /**
      * 创建弹出的ListView
      */
-    private void createPopupFolderList(ArrayList<Folder> folders) {
+    private void createPopupFolderListAndShow(ArrayList<Folder> folders) {
+        if (folders == null) return;
+
         Point point = ScreenUtils.getScreenSize(getActivity());
         int width = point.x;
         int height = (int) (point.y * 0.7);
@@ -190,5 +217,9 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
                 ((FolderAdapter) parent.getAdapter()).setSelectedPosition(position);
             }
         });
+
+        mBackgroundView.setVisibility(View.VISIBLE);
+        mFolderPopupWindow.show();
+        mFolderPopupWindow.getListView().setSelector(android.R.color.transparent);
     }
 }

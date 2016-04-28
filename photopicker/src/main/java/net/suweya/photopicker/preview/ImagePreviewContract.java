@@ -1,6 +1,6 @@
 package net.suweya.photopicker.preview;
 
-import android.util.SparseBooleanArray;
+import android.os.Bundle;
 
 import net.suweya.photopicker.base.BasePresenter;
 import net.suweya.photopicker.entity.Image;
@@ -14,9 +14,10 @@ import java.util.ArrayList;
 public interface ImagePreviewContract {
 
     interface Presenter extends BasePresenter {
-        ArrayList<Image> filterCheckedImageList(SparseBooleanArray checkedArray);
+        void filterCheckedImageList(Bundle bundle);
     }
 
     interface View {
+        void setUpViewPager(ArrayList<Image> images, int position);
     }
 }

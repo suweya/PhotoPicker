@@ -12,14 +12,16 @@ public class Image {
     public String path;
     public String name;
     public long time;
+    public TYPE type;
 
     public boolean selected = false;
 
-    public Image(int position, String path, String name, long time) {
+    public Image(int position, String path, String name, long time, TYPE type) {
         this.position = position;
         this.path = path;
         this.name = name;
         this.time = time;
+        this.type = type;
     }
 
     @Override
@@ -44,6 +46,12 @@ public class Image {
                 ", time=" + time +
                 ", selected=" + selected +
                 '}';
+    }
+
+    public enum TYPE {
+        IMAGE,
+        GIF,
+        VIDEO
     }
 }
 

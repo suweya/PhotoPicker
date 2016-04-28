@@ -75,6 +75,7 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<ViewHolder>
             Image image = mImages.get(position);
             Glide.with(mContext)
                     .load(image.path)
+                    .asBitmap()
                     .placeholder(R.drawable.image_loading_placeholder)
                     .error(R.drawable.ic_photo_size_select_actual_black_24dp)
                     .into(vh.mImageView);
@@ -124,6 +125,10 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<ViewHolder>
             return mCheckedArray;
         }
         return null;
+    }
+
+    public int getSelectedCount() {
+        return mCheckedArray.size();
     }
 
     @Override

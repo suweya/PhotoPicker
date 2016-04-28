@@ -23,7 +23,8 @@ public class ImagePreviewAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return ImageFragment.newInstance(mImages.get(position).path);
+        Image image = mImages.get(position);
+        return ImageFragment.newInstance(image.path, image.type);
     }
 
     @Override

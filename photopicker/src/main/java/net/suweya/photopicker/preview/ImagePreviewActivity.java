@@ -4,11 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.SparseBooleanArray;
+import android.view.MenuItem;
 
 import net.suweya.photopicker.R;
+
+import java.util.ArrayList;
 
 import static net.suweya.photopicker.preview.ImagePreviewFragment.CURRENT_ITEM;
 
@@ -19,7 +22,7 @@ import static net.suweya.photopicker.preview.ImagePreviewFragment.CURRENT_ITEM;
 public class ImagePreviewActivity extends AppCompatActivity {
 
     private static final int DEFAULT_VALUE = 0;
-    private static final String KEY_CHECKED_POS_ARRAY = "CHECKED_POS_ARRAY";
+    public static final String KEY_CHECKED_POS_ARRAY = "CHECKED_POS_ARRAY";
 
     public static void start(Context context, int item) {
         Intent starter = new Intent(context, ImagePreviewActivity.class);
@@ -27,9 +30,9 @@ public class ImagePreviewActivity extends AppCompatActivity {
         context.startActivity(starter);
     }
 
-    public static void start(Context context, SparseBooleanArray array) {
+    public static void start(Context context, ArrayList<Integer> array) {
         Intent starter = new Intent(context, ImagePreviewActivity.class);
-//        starter.putExtra(KEY_CHECKED_POS_ARRAY, array.key);
+        starter.putExtra(KEY_CHECKED_POS_ARRAY, array);
         context.startActivity(starter);
     }
 
@@ -42,13 +45,29 @@ public class ImagePreviewActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         ImagePreviewFragment fragment = (ImagePreviewFragment) getSupportFragmentManager().findFragmentById(R.id.container);
         if (fragment == null) {
-            int item = getIntent().getIntExtra(CURRENT_ITEM, DEFAULT_VALUE);
-            fragment = ImagePreviewFragment.newInstance(item);
+            ArrayList<Integer> list = getIntent().getIntegerArrayListExtra(KEY_CHECKED_POS_ARRAY);
+            if (list == null) {
+                int item = getIntent().getIntExtra(CURRENT_ITEM, DEFAULT_VALUE);
+                fragment = ImagePreviewFragment.newInstance(item);
+            } else {
+                fragment = ImagePreviewFragment.newInstance(list);
+            }
             getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

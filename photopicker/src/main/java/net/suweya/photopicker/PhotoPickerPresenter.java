@@ -38,6 +38,7 @@ public class PhotoPickerPresenter implements PhotoPickerContract.Presenter {
         if (mSubscription != null) {
             mSubscription.unsubscribe();
         }
+        mFolders = null;
     }
 
     @Override

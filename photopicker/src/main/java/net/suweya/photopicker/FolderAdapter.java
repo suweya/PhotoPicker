@@ -76,6 +76,7 @@ public class FolderAdapter extends BaseAdapter {
         // 显示图片
         Glide.with(mContext)
                 .load(data.cover.path)
+                .asBitmap()
                 .placeholder(R.drawable.image_loading_placeholder)
                 .into(holder.cover);
         if (i == mSelectedPosition) {
