@@ -5,8 +5,14 @@
 
     <application
         android:allowBackup="true"
-        android:label="@string/app_name"
         android:supportsRtl="true">
+
+        <activity
+            android:name=".PhotoPickerActivity"
+            android:configChanges="screenSize|keyboard|screenLayout"
+            android:theme="@style/ImagePreviewTheme"
+            android:label="@string/photo_picker"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".preview.ImagePreviewActivity"

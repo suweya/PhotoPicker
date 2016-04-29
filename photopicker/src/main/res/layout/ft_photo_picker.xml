@@ -53,7 +53,8 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:text="@string/preview"
-                android:textColor="@android:color/white"
+                android:enabled="false"
+                android:textColor="@drawable/button_text_color"
                 android:textSize="14sp"/>
 
         </RelativeLayout>

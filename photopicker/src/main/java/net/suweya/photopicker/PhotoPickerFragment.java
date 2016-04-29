@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.MemoryCategory;
@@ -120,6 +121,11 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
     }
 
     @Override
+    public void showToast(int message) {
+        Toast.makeText(getContext().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void showGallery(ArrayList<Image> images) {
         ImageData.getInstance().setAllImages(images);
         PhotoPickerAdapter adapter = new PhotoPickerAdapter(getContext(), images, mShowCameraGrid,
@@ -134,7 +140,7 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
                         ImageData.getInstance().setImages(images);
                         ImagePreviewActivity.start(getContext(), position);
                     }
-                });
+                }, mPresenter);
         mRecyclerView.setAdapter(adapter);
     }
 

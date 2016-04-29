@@ -2,6 +2,7 @@ package net.suweya.photopicker;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.util.SparseBooleanArray;
 
 import net.suweya.photopicker.entity.Folder;
 import net.suweya.photopicker.entity.GalleryBundle;
@@ -19,6 +20,7 @@ import rx.schedulers.Schedulers;
  */
 public class PhotoPickerPresenter implements PhotoPickerContract.Presenter {
 
+    private static final int MAX_IMAGE_SELECTED = 9;
     public static final int DEFAULT_CAMERA_GRID_POSITION = 0;
 
     private PhotoPickerContract.View mView;
@@ -78,5 +80,14 @@ public class PhotoPickerPresenter implements PhotoPickerContract.Presenter {
                     position == DEFAULT_CAMERA_GRID_POSITION);
             mView.changeGalleryName(mFolders.get(position).name);
         }
+    }
+
+    @Override
+    public boolean isMaxImageSelected(SparseBooleanArray array) {
+        if (array != null && array.size() >= 9) {
+            mView.showToast(R.string.max_images);
+            return true;
+        }
+        return false;
     }
 }

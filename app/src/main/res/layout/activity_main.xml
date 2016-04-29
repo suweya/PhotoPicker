@@ -7,4 +7,11 @@
     android:layout_height="match_parent"
     tools:context="net.suweya.photopickersample.MainActivity">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button"
+        android:onClick="onClick"
+        android:layout_gravity="left|top"/>
 </FrameLayout>

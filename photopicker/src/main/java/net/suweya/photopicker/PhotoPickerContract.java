@@ -1,6 +1,7 @@
 package net.suweya.photopicker;
 
 import android.content.Context;
+import android.util.SparseBooleanArray;
 
 import net.suweya.photopicker.base.BasePresenter;
 import net.suweya.photopicker.entity.Folder;
@@ -24,6 +25,8 @@ public interface PhotoPickerContract {
         ArrayList<Folder> fetchFolderData();
 
         void filterFolderImage(int position);
+
+        boolean isMaxImageSelected(SparseBooleanArray array);
     }
 
     interface View {
@@ -35,6 +38,8 @@ public interface PhotoPickerContract {
         void showFolderPickerPop();
 
         void changeGalleryName(String categoryName);
+
+        void showToast(int message);
     }
 
     interface Model {

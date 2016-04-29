@@ -2,6 +2,7 @@ package net.suweya.photopicker;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.SparseBooleanArray;
 
 import net.suweya.photopicker.entity.Image;
 
@@ -42,5 +43,15 @@ public class ImageData {
 
     public void setAllImages(@NonNull ArrayList<Image> images) {
         this.allImages = new WeakReference<>(images);
+    }
+
+    private WeakReference<SparseBooleanArray> mCheckedArrayRef;
+
+    public SparseBooleanArray getCheckedArray() {
+        return mCheckedArrayRef.get();
+    }
+
+    public void setCheckedArray(SparseBooleanArray checkedArray) {
+        mCheckedArrayRef = new WeakReference<>(checkedArray);
     }
 }

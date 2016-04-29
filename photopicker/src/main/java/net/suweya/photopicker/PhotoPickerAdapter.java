@@ -42,16 +42,22 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<ViewHolder>
 
     //选中记录
     private SparseBooleanArray mCheckedArray = new SparseBooleanArray();
+    //Presenter
+    private PhotoPickerContract.Presenter mPhotoPickerPresenter;
 
     public PhotoPickerAdapter(@NonNull Context context,
                               @NonNull  ArrayList<Image> images,
                               boolean showCameraGrid,
-                              @NonNull  PhotoCheckListener listener) {
+                              @NonNull  PhotoCheckListener listener,
+                              @NonNull PhotoPickerContract.Presenter presenter) {
         mContext = context;
         mImages = images;
         mLayoutInflater = LayoutInflater.from(context);
         mShowCameraGrid = showCameraGrid;
         mPhotoCheckListener = listener;
+        mPhotoPickerPresenter = presenter;
+
+        ImageData.getInstance().setCheckedArray(mCheckedArray);
     }
 
     @Override
@@ -75,7 +81,7 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<ViewHolder>
             Image image = mImages.get(position);
             Glide.with(mContext)
                     .load(image.path)
-                    .asBitmap()
+                    //.asBitmap()
                     .placeholder(R.drawable.image_loading_placeholder)
                     .error(R.drawable.ic_photo_size_select_actual_black_24dp)
                     .into(vh.mImageView);
@@ -96,23 +102,26 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<ViewHolder>
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.check_mark) {
-            View mask = (View) v.getTag();
-            int position = (int) mask.getTag();
-            Image image = mImages.get(position);
-            boolean value = !image.selected;
-            mask.setVisibility(value ? View.VISIBLE : View.GONE);
-            ((AppCompatCheckBox) v).setChecked(value);
-            image.selected = value;
 
-            //mSelectedCount = value ? mSelectedCount+1 : mSelectedCount-1;
+            if (!mPhotoPickerPresenter.isMaxImageSelected(mCheckedArray)) {
+                View mask = (View) v.getTag();
+                int position = (int) mask.getTag();
+                Image image = mImages.get(position);
+                boolean value = !image.selected;
+                mask.setVisibility(value ? View.VISIBLE : View.GONE);
+                ((AppCompatCheckBox) v).setChecked(value);
+                image.selected = value;
 
-            if (value) {
-                mCheckedArray.put(image.position, true);
-            } else {
-                mCheckedArray.delete(image.position);
+                //mSelectedCount = value ? mSelectedCount+1 : mSelectedCount-1;
+
+                if (value) {
+                    mCheckedArray.put(image.position, true);
+                } else {
+                    mCheckedArray.delete(image.position);
+                }
+
+                mPhotoCheckListener.onPhotoCheck(mCheckedArray.size());
             }
-
-            mPhotoCheckListener.onPhotoCheck(mCheckedArray.size());
 
         } else if (v.getId() == R.id.item_view) {
             int position = (int) v.getTag();

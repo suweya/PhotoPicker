@@ -1,0 +1,10 @@
+<resources>
+    <string name="take_photo">拍摄照片</string>
+    <string name="category_all_image">所有图片</string>
+    <string name="preview">预览</string>
+    <string name="photo_unit">张</string>
+    <string name="selected">选择</string>
+    <string name="send">发送</string>
+    <string name="photo_picker">图片选择</string>
+    <string name="max_images">最多只能选择9个图片</string>
+</resources>

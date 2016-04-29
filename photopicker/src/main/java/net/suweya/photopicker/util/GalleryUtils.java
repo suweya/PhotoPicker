@@ -39,10 +39,10 @@ public class GalleryUtils {
         Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         String selection = IMAGE_PROJECTION[4]+">0 AND "+
                 IMAGE_PROJECTION[3]+"=? OR " +
-                IMAGE_PROJECTION[3]+"=? OR " +
+                //IMAGE_PROJECTION[3]+"=? OR " +
                 IMAGE_PROJECTION[3]+"=? OR " +
                 IMAGE_PROJECTION[3]+"=?";
-        String [] selectionArgs = new String[]{MIME_TYPE_IAMGE_GIF, MIME_TYPE_IAMGE_JPEG, MIME_TYPE_IAMGE_JPG, MIME_TYPE_IAMGE_PNG};
+        String [] selectionArgs = new String[]{/*MIME_TYPE_IAMGE_GIF,*/ MIME_TYPE_IAMGE_JPEG, MIME_TYPE_IAMGE_JPG, MIME_TYPE_IAMGE_PNG};
         String sortOrder = IMAGE_PROJECTION[2] + " DESC";
 
         Cursor cursor = context.getContentResolver().query(uri, IMAGE_PROJECTION, selection, selectionArgs, sortOrder);
