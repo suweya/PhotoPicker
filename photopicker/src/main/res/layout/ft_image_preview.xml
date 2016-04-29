@@ -14,19 +14,35 @@
         android:layout_height="45dp"
         android:layout_gravity="end|bottom"
         android:background="@color/bar_background"
-        android:paddingEnd="10dp"
+        android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
-        <android.support.v7.widget.AppCompatCheckBox
-            android:id="@+id/check_mark"
+        <LinearLayout
+            android:id="@+id/ll_check_mark"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:text="@string/selected"
-            app:buttonTint="?colorAccent"
-            android:textColor="@android:color/white"/>
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/check_mark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_check_box"
+                app:backgroundTint="?colorAccent"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/selected"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/white"/>
+
+        </LinearLayout>
 
     </RelativeLayout>
 

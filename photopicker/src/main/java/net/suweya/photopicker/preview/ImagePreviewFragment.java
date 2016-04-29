@@ -4,12 +4,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import net.suweya.photopicker.ImageData;
@@ -52,7 +52,8 @@ public class ImagePreviewFragment extends BaseFragment<ImagePreviewContract.Pres
 
     private ImagePreviewActivity mImagePreviewActivity;
     private ViewPager mViewPager;
-    private AppCompatCheckBox mAppCompatCheckBox;
+    private LinearLayout mLinearLayout;
+    private AppCompatImageView mCheckMark;
     private int mCurrentSelectedPosition;
     private SparseBooleanArray mCheckedArray;
 
@@ -76,7 +77,8 @@ public class ImagePreviewFragment extends BaseFragment<ImagePreviewContract.Pres
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ft_image_preview, container, false);
         mViewPager = (ViewPager) view.findViewById(R.id.pager);
-        mAppCompatCheckBox = (AppCompatCheckBox) view.findViewById(R.id.check_mark);
+        mCheckMark = (AppCompatImageView) view.findViewById(R.id.check_mark);
+        mLinearLayout = (LinearLayout) view.findViewById(R.id.ll_check_mark);
 
         mPresenter.filterCheckedImageList(getArguments());
 
@@ -102,7 +104,7 @@ public class ImagePreviewFragment extends BaseFragment<ImagePreviewContract.Pres
             public void onPageSelected(int position) {
                 mCurrentSelectedPosition = position;
                 mImagePreviewActivity.setTitle((position+1) + "/" + imageCount);
-                mAppCompatCheckBox.setChecked(images.get(position).selected);
+                mCheckMark.setSelected(images.get(position).selected);
             }
 
             @Override
@@ -113,14 +115,14 @@ public class ImagePreviewFragment extends BaseFragment<ImagePreviewContract.Pres
         mViewPager.setCurrentItem(mCurrentSelectedPosition);
         if (mCurrentSelectedPosition == 0) {
             mImagePreviewActivity.setTitle((mCurrentSelectedPosition+1) + "/" + imageCount);
-            mAppCompatCheckBox.setChecked(images.get(mCurrentSelectedPosition).selected);
+            mCheckMark.setSelected(images.get(mCurrentSelectedPosition).selected);
         }
-        mAppCompatCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onClick(View v) {
                 Image image = images.get(mCurrentSelectedPosition);
-                image.selected = isChecked;
-                modifyCheckStatus(isChecked, image.position);
+                boolean isChecked = !image.selected;
+                modifyCheckStatus(isChecked, image);
             }
         });
     }
@@ -130,15 +132,19 @@ public class ImagePreviewFragment extends BaseFragment<ImagePreviewContract.Pres
         Toast.makeText(getContext().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    private void modifyCheckStatus(boolean value, int position) {
+    private void modifyCheckStatus(boolean value, Image image) {
         if (mCheckedArray != null) {
             if (value) {
                 boolean allow = !mPresenter.isMaxImageSelected(mCheckedArray);
                 if (allow) {
-                    mCheckedArray.put(position, true);
+                    mCheckedArray.put(image.position, true);
+                    image.selected = true;
+                    mCheckMark.setSelected(true);
                 }
             } else {
-                mCheckedArray.delete(position);
+                mCheckedArray.delete(image.position);
+                image.selected = false;
+                mCheckMark.setSelected(false);
             }
         }
     }

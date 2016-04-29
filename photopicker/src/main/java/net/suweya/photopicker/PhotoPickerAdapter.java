@@ -2,13 +2,14 @@ package net.suweya.photopicker;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.bumptech.glide.Glide;
 
@@ -64,7 +65,7 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<ViewHolder>
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_IMAGE) {
             VH holder = new VH(mLayoutInflater.inflate(R.layout.item_image, parent, false));
-            holder.mCheckMark.setOnClickListener(this);
+            holder.mFrameLayout.setOnClickListener(this);
             holder.itemView.setOnClickListener(this);
             return holder;
         } else {
@@ -87,12 +88,13 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<ViewHolder>
                     .into(vh.mImageView);
 
             if (image.selected) {
-                vh.mCheckMark.setChecked(true);
+                vh.mCheckMark.setBackgroundResource(R.drawable.ic_check_box_black_24dp);
                 vh.mMask.setVisibility(View.VISIBLE);
             } else {
-                vh.mCheckMark.setChecked(false);
+                vh.mCheckMark.setBackgroundResource(R.drawable.ic_check_box_outline_blank_black_24dp);
                 vh.mMask.setVisibility(View.GONE);
             }
+            vh.mFrameLayout.setTag(vh.mCheckMark);
             vh.mCheckMark.setTag(vh.mMask);
             vh.mMask.setTag(position);
             vh.itemView.setTag(position);
@@ -101,15 +103,18 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<ViewHolder>
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.check_mark) {
+        if (v.getId() == R.id.fl_check_mark) {
 
             if (!mPhotoPickerPresenter.isMaxImageSelected(mCheckedArray)) {
-                View mask = (View) v.getTag();
+                AppCompatImageView imageView = (AppCompatImageView) v.getTag();
+                View mask = (View) imageView.getTag();
                 int position = (int) mask.getTag();
+
                 Image image = mImages.get(position);
                 boolean value = !image.selected;
                 mask.setVisibility(value ? View.VISIBLE : View.GONE);
-                ((AppCompatCheckBox) v).setChecked(value);
+                imageView.setBackgroundResource(value ? R.drawable.ic_check_box_black_24dp :
+                R.drawable.ic_check_box_outline_blank_black_24dp);
                 image.selected = value;
 
                 //mSelectedCount = value ? mSelectedCount+1 : mSelectedCount-1;
@@ -158,14 +163,16 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<ViewHolder>
 
     static class VH extends RecyclerView.ViewHolder {
 
-        AppCompatCheckBox mCheckMark;
+        FrameLayout mFrameLayout;
+        AppCompatImageView mCheckMark;
         View mMask;
         SquareImageView mImageView;
 
         public VH(View itemView) {
             super(itemView);
             itemView.setId(R.id.item_view);
-            mCheckMark = (AppCompatCheckBox) itemView.findViewById(R.id.check_mark);
+            mCheckMark = (AppCompatImageView) itemView.findViewById(R.id.check_mark);
+            mFrameLayout = (FrameLayout) itemView.findViewById(R.id.fl_check_mark);
             mMask = itemView.findViewById(R.id.mask);
             mImageView = (SquareImageView) itemView.findViewById(R.id.image);
         }

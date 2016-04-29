@@ -2,4 +2,5 @@
 <resources>
     <item name="gray" type="color">cc000000</item>
     <color name="bar_background">#cc000000</color>
+    <color name="send_text_disable">#9fbe96</color>
 </resources>

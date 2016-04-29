@@ -17,14 +17,25 @@
         android:background="#88000000"
         android:visibility="gone"/>
 
-    <android.support.v7.widget.AppCompatCheckBox
-        android:id="@+id/check_mark"
+    <FrameLayout
+        android:id="@+id/fl_check_mark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|end"
-        app:buttonTint="?colorAccent"
-        android:layout_marginEnd="5.5dp"
-        android:layout_marginRight="5.5dp"
-        android:layout_marginTop="5.5dp"/>
+        android:layout_gravity="end"
+        android:paddingBottom="10dp"
+        android:paddingEnd="5.5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="5.5dp"
+        android:paddingStart="10dp"
+        android:paddingTop="5.5dp">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/check_mark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:background="@drawable/ic_check_box_outline_blank_black_24dp"
+            app:backgroundTint="?colorAccent"/>
+    </FrameLayout>
 
 </net.suweya.photopicker.widget.SquareFrameLayout>
