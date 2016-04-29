@@ -8,6 +8,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 /**
  * PhotoPickerActivity
@@ -22,6 +24,8 @@ public class PhotoPickerActivity extends AppCompatActivity {
         context.startActivity(starter);
     }
 
+    private Button mBtnSend;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +34,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
         //setup toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mBtnSend = (Button) findViewById(R.id.btn_send);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -42,6 +47,22 @@ public class PhotoPickerActivity extends AppCompatActivity {
             fragment = PhotoPickerFragment.newInstance(showCamera);
             getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
         }
+
+
+        final PhotoPickerFragment finalFragment = fragment;
+        mBtnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (finalFragment != null) {
+
+                }
+            }
+        });
+    }
+
+    public void modifySendButtonNum(int num) {
+        mBtnSend.setEnabled(num == 0);
+        mBtnSend.setText(getResources().getQuantityString(R.plurals.send, num, PhotoPickerPresenter.MAX_IMAGE_SELECTED));
     }
 
     @Override

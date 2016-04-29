@@ -20,7 +20,7 @@ import rx.schedulers.Schedulers;
  */
 public class PhotoPickerPresenter implements PhotoPickerContract.Presenter {
 
-    private static final int MAX_IMAGE_SELECTED = 9;
+    public static final int MAX_IMAGE_SELECTED = 9;
     public static final int DEFAULT_CAMERA_GRID_POSITION = 0;
 
     private PhotoPickerContract.View mView;
@@ -84,7 +84,7 @@ public class PhotoPickerPresenter implements PhotoPickerContract.Presenter {
 
     @Override
     public boolean isMaxImageSelected(SparseBooleanArray array) {
-        if (array != null && array.size() >= 9) {
+        if (array != null && array.size() >= MAX_IMAGE_SELECTED) {
             mView.showToast(R.string.max_images);
             return true;
         }

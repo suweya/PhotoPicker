@@ -1,5 +1,6 @@
 package net.suweya.photopicker;
 
+import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -57,6 +58,13 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
     private Button mPreviewButton;
     private View mBackgroundView;
     private Button mCategoryButton;
+    private PhotoPickerActivity mPhotoPickerActivity;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mPhotoPickerActivity = (PhotoPickerActivity) context;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -152,6 +160,9 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
             mPreviewButton.setText("预览");
         }
         mPreviewButton.setEnabled(enable);
+
+        // update send button num
+        mPhotoPickerActivity.modifySendButtonNum(count);
     }
 
     @Override

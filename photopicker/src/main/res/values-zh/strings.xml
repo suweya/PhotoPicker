@@ -4,7 +4,11 @@
     <string name="preview">预览</string>
     <string name="photo_unit">张</string>
     <string name="selected">选择</string>
-    <string name="send">发送</string>
     <string name="photo_picker">图片选择</string>
     <string name="max_images">最多只能选择9个图片</string>
+
+    <plurals name="send">
+        <item quantity="zero">发送</item>
+        <item quantity="other">发送(%1$d/%2$d)</item>
+    </plurals>
 </resources>

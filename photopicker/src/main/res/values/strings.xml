@@ -4,7 +4,11 @@
     <string name="preview">Preview</string>
     <string name="photo_unit">Unit</string>
     <string name="selected">Select</string>
-    <string name="send">Send</string>
     <string name="photo_picker">Photo Picker</string>
     <string name="max_images">Up to 9 pictures can only choose</string>
+
+    <plurals name="send">
+    <item quantity="zero" >Send</item>
+    <item quantity="other">Send(%1d/%2d)</item>
+</plurals>
 </resources>
