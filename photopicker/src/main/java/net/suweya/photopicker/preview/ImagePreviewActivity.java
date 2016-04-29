@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -25,10 +24,10 @@ public class ImagePreviewActivity extends AppCompatActivity {
     private static final int DEFAULT_VALUE = 0;
     public static final String KEY_CHECKED_POS_ARRAY = "CHECKED_POS_ARRAY";
 
-    public static void start(Fragment fragment, int item) {
-        Intent starter = new Intent(fragment.getContext(), ImagePreviewActivity.class);
+    public static void start(Context context, int item) {
+        Intent starter = new Intent(context, ImagePreviewActivity.class);
         starter.putExtra(CURRENT_ITEM, item);
-        fragment.startActivityForResult(starter, );
+        context.startActivity(starter);
     }
 
     public static void start(Context context, ArrayList<Integer> array) {
