@@ -54,15 +54,15 @@ public class PhotoPickerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (finalFragment != null) {
-
+                    System.out.println(finalFragment.getSelectedImagePath().toString());
                 }
             }
         });
     }
 
     public void modifySendButtonNum(int num) {
-        mBtnSend.setEnabled(num == 0);
-        mBtnSend.setText(getResources().getQuantityString(R.plurals.send, num, PhotoPickerPresenter.MAX_IMAGE_SELECTED));
+        mBtnSend.setEnabled(num != 0);
+        mBtnSend.setText(getResources().getQuantityString(R.plurals.send, num, num));
     }
 
     @Override

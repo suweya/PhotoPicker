@@ -6,9 +6,10 @@
     <string name="selected">Select</string>
     <string name="photo_picker">Photo Picker</string>
     <string name="max_images">Up to 9 pictures can only choose</string>
+    <string name="send_default">Send</string>
 
     <plurals name="send">
-    <item quantity="zero" >Send</item>
-    <item quantity="other">Send(%1d/%2d)</item>
-</plurals>
+        <item quantity="zero">Send</item>
+        <item quantity="other">Send(%d/9)</item>
+    </plurals>
 </resources>

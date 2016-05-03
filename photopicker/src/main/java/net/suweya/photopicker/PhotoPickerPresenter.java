@@ -6,6 +6,7 @@ import android.util.SparseBooleanArray;
 
 import net.suweya.photopicker.entity.Folder;
 import net.suweya.photopicker.entity.GalleryBundle;
+import net.suweya.photopicker.entity.Image;
 
 import java.util.ArrayList;
 
@@ -89,5 +90,21 @@ public class PhotoPickerPresenter implements PhotoPickerContract.Presenter {
             return true;
         }
         return false;
+    }
+
+    @Nullable
+    @Override
+    public ArrayList<String> getSelectedImagePath() {
+        ArrayList<Image> allImages = ImageData.getInstance().getAllImages();
+        SparseBooleanArray selectedArray = ImageData.getInstance().getCheckedArray();
+        if (allImages != null && selectedArray != null) {
+            int count = selectedArray.size();
+            ArrayList<String> selectedImages = new ArrayList<>(count);
+            for (int i = 0; i < count; i++) {
+                selectedImages.add(allImages.get(selectedArray.keyAt(i)).path);
+            }
+            return selectedImages;
+        }
+        return null;
     }
 }

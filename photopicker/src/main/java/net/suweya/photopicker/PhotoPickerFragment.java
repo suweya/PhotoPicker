@@ -239,4 +239,8 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
         mFolderPopupWindow.show();
         mFolderPopupWindow.getListView().setSelector(android.R.color.transparent);
     }
+
+    public ArrayList<String> getSelectedImagePath() {
+        return  mPresenter.getSelectedImagePath();
+    }
 }

@@ -27,6 +27,8 @@ public interface PhotoPickerContract {
         void filterFolderImage(int position);
 
         boolean isMaxImageSelected(SparseBooleanArray array);
+
+        ArrayList<String> getSelectedImagePath();
     }
 
     interface View {
