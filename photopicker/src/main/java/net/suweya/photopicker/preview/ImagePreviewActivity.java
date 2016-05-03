@@ -36,14 +36,16 @@ public class ImagePreviewActivity extends AppCompatActivity {
         context.startActivity(starter);
     }
 
+    private Toolbar mToolbar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_image_preview);
 
         //setup toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -65,9 +67,19 @@ public class ImagePreviewActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void toggleToolbar(boolean value) {
+        int height = mToolbar.getHeight();
+        if (value) {
+            mToolbar.animate().translationYBy(height).setDuration(500).start();
+        } else {
+            mToolbar.animate().translationYBy(-height).setDuration(500).start();
+        }
     }
 }

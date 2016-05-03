@@ -1,7 +1,9 @@
 package net.suweya.photopicker;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -213,7 +215,7 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
         int width = point.x;
         int height = (int) (point.y * 0.7);
         mFolderPopupWindow = new ListPopupWindow(getActivity());
-        //mFolderPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        mFolderPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         mFolderPopupWindow.setAdapter(new FolderAdapter(getContext(), folders));
         mFolderPopupWindow.setContentWidth(width);
         mFolderPopupWindow.setWidth(width);
