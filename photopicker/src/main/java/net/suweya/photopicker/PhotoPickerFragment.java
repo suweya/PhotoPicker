@@ -101,7 +101,7 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
         mPreviewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SparseBooleanArray array = ((PhotoPickerAdapter)mRecyclerView.getAdapter()).getCheckedArray();
+                SparseBooleanArray array = ((PhotoPickerAdapter) mRecyclerView.getAdapter()).getCheckedArray();
                 if (array != null) {
                     ImagePreviewActivity.start(getContext(), ArrayUtil.asKeyList(array));
                 }
@@ -181,13 +181,13 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
     public void showFolderPickerPop() {
         if (mFolderPopupWindow == null) {
             createPopupFolderListAndShow(mPresenter.fetchFolderData());
-        } else if (mFolderPopupWindow.isShowing()){
+        } else if (mFolderPopupWindow.isShowing()) {
             mFolderPopupWindow.dismiss();
         } else {
             mBackgroundView.setVisibility(View.VISIBLE);
             mFolderPopupWindow.show();
             ListView listView = mFolderPopupWindow.getListView();
-            int position = ((FolderAdapter)listView.getAdapter()).getSelectedPosition();
+            int position = ((FolderAdapter) listView.getAdapter()).getSelectedPosition();
             position = position == 0 ? position : (position - 1);
             listView.setSelection(position);
         }
@@ -243,6 +243,6 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
     }
 
     public ArrayList<String> getSelectedImagePath() {
-        return  mPresenter.getSelectedImagePath();
+        return mPresenter.getSelectedImagePath();
     }
 }
