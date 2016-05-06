@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="PhotoPickerTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!--<item name="android:background">@drawable/image_loading_placeholder</item>-->
+    <style name="PhotoPickerBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/bar_background</item>
+        <item name="toolbarBackgroundColor">@color/bar_background</item>
     </style>
 
-    <style name="ImagePreviewTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="PhotoPickerTheme" parent="PhotoPickerBaseTheme">
+    </style>
+
+    <style name="ImagePreviewTheme" parent="PhotoPickerBaseTheme">
         <item name="android:windowBackground">@drawable/image_loading_placeholder</item>
     </style>
 
-    <style name="Toolbar">
+    <!--<style name="Toolbar">
         <item name="colorAccent">@android:color/white</item>
-    </style>
+    </style>-->
 
 </resources>
