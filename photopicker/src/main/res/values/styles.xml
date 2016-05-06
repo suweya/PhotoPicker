@@ -4,6 +4,7 @@
     <style name="PhotoPickerBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimaryDark">@color/bar_background</item>
         <item name="toolbarBackgroundColor">@color/bar_background</item>
+        <item name="bottomBarBackgroundColor">@color/bar_background</item>
     </style>
 
     <style name="PhotoPickerTheme" parent="PhotoPickerBaseTheme">

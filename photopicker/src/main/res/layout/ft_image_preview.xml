@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_gravity="end|bottom"
-        android:background="@color/bar_background"
+        android:background="?bottomBarBackgroundColor"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
