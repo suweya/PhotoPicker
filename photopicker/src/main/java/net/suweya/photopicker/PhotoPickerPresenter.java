@@ -1,13 +1,22 @@
 package net.suweya.photopicker;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.SparseBooleanArray;
 
 import net.suweya.photopicker.entity.Folder;
 import net.suweya.photopicker.entity.GalleryBundle;
 import net.suweya.photopicker.entity.Image;
+import net.suweya.photopicker.util.FileUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import rx.Subscriber;
@@ -23,6 +32,7 @@ public class PhotoPickerPresenter implements PhotoPickerContract.Presenter {
 
     public static final int MAX_IMAGE_SELECTED = 9;
     public static final int DEFAULT_CAMERA_GRID_POSITION = 0;
+    private static final int REQUEST_TAKE_PHOTO = 20;
 
     private PhotoPickerContract.View mView;
     private PhotoPickerContract.Model mModel;
@@ -30,6 +40,8 @@ public class PhotoPickerPresenter implements PhotoPickerContract.Presenter {
     private Subscription mSubscription;
 
     private ArrayList<Folder> mFolders;
+
+    private File mImageFile;
 
     public PhotoPickerPresenter(PhotoPickerContract.View view, PhotoPickerContract.Model model) {
         mView = view;
@@ -42,6 +54,7 @@ public class PhotoPickerPresenter implements PhotoPickerContract.Presenter {
             mSubscription.unsubscribe();
         }
         mFolders = null;
+        mImageFile = null;
     }
 
     @Override
@@ -106,5 +119,27 @@ public class PhotoPickerPresenter implements PhotoPickerContract.Presenter {
             return selectedImages;
         }
         return null;
+    }
+
+    @Override
+    public void takePhoto(@NonNull Fragment fragment) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(fragment.getContext().getPackageManager()) != null) {
+            File photoFile = FileUtil.createTakePhotoImageFile(
+                    fragment.getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES));
+            if (photoFile != null) {
+                mImageFile = photoFile;
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photoFile));
+                fragment.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK && mImageFile != null) {
+            mView.finishWithCamera(mImageFile.getAbsolutePath());
+        }
     }
 }

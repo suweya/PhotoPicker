@@ -2,14 +2,13 @@
     <string name="take_photo">Take photo</string>
     <string name="category_all_image">ALL IMAGES</string>
     <string name="preview">Preview</string>
+    <string name="preview_count">Preview(%d)</string>
     <string name="photo_unit">Unit</string>
     <string name="selected">Select</string>
     <string name="photo_picker">Photo Picker</string>
     <string name="max_images">Up to 9 pictures can only choose</string>
     <string name="send_default">Send</string>
 
-    <plurals name="send">
-        <item quantity="zero">Send</item>
-        <item quantity="other">Send(%d/9)</item>
-    </plurals>
+    <string name="send">Send</string>
+    <string name="send_count">Send(%d/9)</string>
 </resources>

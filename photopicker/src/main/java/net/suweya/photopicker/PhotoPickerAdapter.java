@@ -45,17 +45,20 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<ViewHolder>
     private SparseBooleanArray mCheckedArray = new SparseBooleanArray();
     //Presenter
     private PhotoPickerContract.Presenter mPhotoPickerPresenter;
+    private PhotoPickerContract.View mPhotoPickerView;
 
     public PhotoPickerAdapter(@NonNull Context context,
                               @NonNull  ArrayList<Image> images,
                               boolean showCameraGrid,
                               @NonNull  PhotoCheckListener listener,
+                              @NonNull PhotoPickerContract.View view,
                               @NonNull PhotoPickerContract.Presenter presenter) {
         mContext = context;
         mImages = images;
         mLayoutInflater = LayoutInflater.from(context);
         mShowCameraGrid = showCameraGrid;
         mPhotoCheckListener = listener;
+        mPhotoPickerView = view;
         mPhotoPickerPresenter = presenter;
 
         ImageData.getInstance().setCheckedArray(mCheckedArray);
@@ -69,7 +72,9 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<ViewHolder>
             holder.itemView.setOnClickListener(this);
             return holder;
         } else {
-            return new ViewHolder(mLayoutInflater.inflate(R.layout.item_camera, parent, false)){};
+            ViewHolder holder = new ViewHolder(mLayoutInflater.inflate(R.layout.item_camera, parent, false)){};
+            holder.itemView.setOnClickListener(this);
+            return holder;
         }
     }
 
@@ -103,7 +108,8 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<ViewHolder>
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.fl_check_mark) {
+        int id = v.getId();
+        if (id == R.id.fl_check_mark) {
 
             if (!mPhotoPickerPresenter.isMaxImageSelected(mCheckedArray)) {
                 AppCompatImageView imageView = (AppCompatImageView) v.getTag();
@@ -128,9 +134,11 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<ViewHolder>
                 mPhotoCheckListener.onPhotoCheck(mCheckedArray.size());
             }
 
-        } else if (v.getId() == R.id.item_view) {
+        } else if (id == R.id.item_view) {
             int position = (int) v.getTag();
             mPhotoCheckListener.onItemViewClick(mImages, position);
+        } else if (id == R.id.take_photo) {
+            mPhotoPickerView.takePhoto();
         }
     }
 

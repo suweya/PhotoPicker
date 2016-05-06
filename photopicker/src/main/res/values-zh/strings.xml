@@ -2,14 +2,13 @@
     <string name="take_photo">拍摄照片</string>
     <string name="category_all_image">所有图片</string>
     <string name="preview">预览</string>
+    <string name="preview_count">预览(%d)</string>
     <string name="photo_unit">张</string>
     <string name="selected">选择</string>
     <string name="photo_picker">图片选择</string>
     <string name="max_images">最多只能选择9个图片</string>
     <string name="send_default">发送</string>
 
-    <plurals name="send">
-        <item quantity="zero">发送</item>
-        <item quantity="other">发送(%d/9)</item>
-    </plurals>
+    <string name="send">发送</string>
+    <string name="send_count">发送(%d/9)</string>
 </resources>

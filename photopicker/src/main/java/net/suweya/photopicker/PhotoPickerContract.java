@@ -1,6 +1,9 @@
 package net.suweya.photopicker;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.util.SparseBooleanArray;
 
 import net.suweya.photopicker.base.BasePresenter;
@@ -29,6 +32,10 @@ public interface PhotoPickerContract {
         boolean isMaxImageSelected(SparseBooleanArray array);
 
         ArrayList<String> getSelectedImagePath();
+
+        void takePhoto(@NonNull Fragment fragment);
+
+        void onActivityResult(int requestCode, int resultCode, Intent data);
     }
 
     interface View {
@@ -42,6 +49,10 @@ public interface PhotoPickerContract {
         void changeGalleryName(String categoryName);
 
         void showToast(int message);
+
+        void takePhoto();
+
+        void finishWithCamera(@NonNull String path);
     }
 
     interface Model {

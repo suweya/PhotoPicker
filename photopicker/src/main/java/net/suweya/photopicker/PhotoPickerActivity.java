@@ -1,6 +1,6 @@
 package net.suweya.photopicker;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,17 +11,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+
 /**
  * PhotoPickerActivity
  */
 public class PhotoPickerActivity extends AppCompatActivity {
 
     private static final String KEY_SHOW_CAMERA = "SHOW_CAMERA";
+    public static final String KEY_SELECTED_DATA = "SELECTED_DATA";
+    public static final int REQUEST_CODE_PHOTO_PICKER = 10;
 
-    public static void start(Context context, boolean showCamera) {
+    public static void start(Activity context, boolean showCamera) {
         Intent starter = new Intent(context, PhotoPickerActivity.class);
         starter.putExtra(KEY_SHOW_CAMERA, showCamera);
-        context.startActivity(starter);
+        context.startActivityForResult(starter, REQUEST_CODE_PHOTO_PICKER);
     }
 
     private Button mBtnSend;
@@ -54,15 +58,28 @@ public class PhotoPickerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (finalFragment != null) {
-                    System.out.println(finalFragment.getSelectedImagePath().toString());
+                    Intent intent = new Intent();
+                    intent.putExtra(KEY_SELECTED_DATA, finalFragment.getSelectedImagePath());
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
             }
         });
     }
 
+    public void finishWithCamera(String path) {
+        Intent intent = new Intent();
+        ArrayList<String> paths = new ArrayList<>(1);
+        paths.add(path);
+        intent.putExtra(KEY_SELECTED_DATA, paths);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
     public void modifySendButtonNum(int num) {
-        mBtnSend.setEnabled(num != 0);
-        mBtnSend.setText(getResources().getQuantityString(R.plurals.send, num, num));
+        boolean enable = num != 0;
+        mBtnSend.setEnabled(enable);
+        mBtnSend.setText(enable ? String.format(getString(R.string.send_count), num) : getString(R.string.send));
     }
 
     @Override

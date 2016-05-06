@@ -1,10 +1,12 @@
 package net.suweya.photopicker;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.ListPopupWindow;
@@ -150,16 +152,18 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
                         ImageData.getInstance().setImages(images);
                         ImagePreviewActivity.start(getContext(), position);
                     }
-                }, mPresenter);
+                },
+                this, /*PhotoPickerContract.View*/
+                mPresenter);
         mRecyclerView.setAdapter(adapter);
     }
 
     private void updatePreviewButton(int count) {
         boolean enable = !(count == 0);
         if (enable) {
-            mPreviewButton.setText(String.format(Locale.CHINA, "预览(%d)", count));
+            mPreviewButton.setText(String.format(Locale.CHINA, getString(R.string.preview_count), count));
         } else {
-            mPreviewButton.setText("预览");
+            mPreviewButton.setText(getString(R.string.preview));
         }
         mPreviewButton.setEnabled(enable);
 
@@ -198,6 +202,22 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
         if (mCategoryButton != null) {
             mCategoryButton.setText(categoryName);
         }
+    }
+
+    @Override
+    public void takePhoto() {
+        mPresenter.takePhoto(this);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mPresenter.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void finishWithCamera(@NonNull String path) {
+        mPhotoPickerActivity.finishWithCamera(path);
     }
 
     @Override
