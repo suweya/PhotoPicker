@@ -23,6 +23,7 @@ import static net.suweya.photopicker.preview.ImagePreviewFragment.CURRENT_ITEM;
  */
 public class ImagePreviewActivity extends AppCompatActivity {
 
+    public static final int DEFAULT_ANIMATION_DURATION = 300;
     private static final int DEFAULT_VALUE = 0;
     public static final String KEY_CHECKED_POS_ARRAY = "CHECKED_POS_ARRAY";
 
@@ -81,9 +82,9 @@ public class ImagePreviewActivity extends AppCompatActivity {
     public void toggleToolbar(boolean value) {
         int height = mToolbar.getHeight();
         if (value) {
-            mToolbar.animate().translationYBy(height).setDuration(500).start();
+            mToolbar.animate().translationYBy(height).setDuration(DEFAULT_ANIMATION_DURATION).start();
         } else {
-            mToolbar.animate().translationYBy(-height).setDuration(500).start();
+            mToolbar.animate().translationYBy(-height).setDuration(DEFAULT_ANIMATION_DURATION).start();
         }
     }
 }

@@ -53,7 +53,7 @@ public class ImageFragment extends Fragment {
             Fragment fragment = getParentFragment();
             if (fragment != null && fragment instanceof ImagePreviewFragment) {
                 ImagePreviewFragment previewFragment = (ImagePreviewFragment) fragment;
-                previewFragment.toggleHideyBar();
+                previewFragment.toggleHideBar();
             }
         }
     };

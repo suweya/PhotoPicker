@@ -123,7 +123,7 @@ public class ImagePreviewFragment extends BaseFragment<ImagePreviewContract.Pres
             @Override
             public void onPageSelected(int position) {
                 mCurrentSelectedPosition = position;
-                mImagePreviewActivity.setTitle((position+1) + "/" + imageCount);
+                mImagePreviewActivity.setTitle((position + 1) + "/" + imageCount);
                 mCheckMark.setSelected(images.get(position).selected);
             }
 
@@ -134,7 +134,7 @@ public class ImagePreviewFragment extends BaseFragment<ImagePreviewContract.Pres
         });
         mViewPager.setCurrentItem(mCurrentSelectedPosition);
         if (mCurrentSelectedPosition == 0) {
-            mImagePreviewActivity.setTitle((mCurrentSelectedPosition+1) + "/" + imageCount);
+            mImagePreviewActivity.setTitle((mCurrentSelectedPosition + 1) + "/" + imageCount);
             mCheckMark.setSelected(images.get(mCurrentSelectedPosition).selected);
         }
         mLinearLayout.setOnClickListener(new View.OnClickListener() {
@@ -169,7 +169,7 @@ public class ImagePreviewFragment extends BaseFragment<ImagePreviewContract.Pres
         }
     }
 
-    public void toggleHideyBar() {
+    public void toggleHideBar() {
 
         /*
         BEGIN_INCLUDE (get_current_ui_flags)
@@ -184,9 +184,11 @@ public class ImagePreviewFragment extends BaseFragment<ImagePreviewContract.Pres
                 ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
         mImagePreviewActivity.toggleToolbar(isImmersiveModeEnabled);
         if (isImmersiveModeEnabled) {
-            mBottomBar.animate().translationYBy(-mBottomBar.getHeight()).setDuration(500).start();
+            mBottomBar.animate().translationYBy(-mBottomBar.getHeight())
+                    .setDuration(ImagePreviewActivity.DEFAULT_ANIMATION_DURATION).start();
         } else {
-            mBottomBar.animate().translationYBy(mBottomBar.getHeight()).setDuration(500).start();
+            mBottomBar.animate().translationYBy(mBottomBar.getHeight())
+                    .setDuration(ImagePreviewActivity.DEFAULT_ANIMATION_DURATION).start();
         }
 
         // Navigation bar hiding:  Backwards compatible to ICS.
