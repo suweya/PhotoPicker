@@ -10,7 +10,7 @@
         <activity
             android:name=".PhotoPickerActivity"
             android:configChanges="screenSize|keyboard|screenLayout"
-            android:theme="@style/ImagePreviewTheme"
+            android:theme="@style/PhotoPickerTheme"
             android:label="@string/photo_picker"
             android:screenOrientation="portrait"/>
 

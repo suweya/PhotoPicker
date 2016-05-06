@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.jaeger.library.StatusBarUtil;
+
 import net.suweya.photopicker.R;
 
 import java.util.ArrayList;
@@ -42,6 +44,8 @@ public class ImagePreviewActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_image_preview);
+        // 设置Layout位于status bar后面，避免隐藏status bar时候Layout抖动
+        StatusBarUtil.setTranslucent(this);
 
         //setup toolbar
         mToolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -17,10 +17,10 @@
             </intent-filter>
         </activity>
 
-        <activity
+        <!--<activity
             android:name="net.suweya.photopicker.preview.ImagePreviewActivity"
             android:theme="@style/AppTheme"
-            tools:replace="android:theme"/>
+            tools:replace="android:theme"/>-->
     </application>
 
 </manifest>

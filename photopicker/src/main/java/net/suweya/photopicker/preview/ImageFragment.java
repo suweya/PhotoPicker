@@ -22,6 +22,7 @@ import net.suweya.photopicker.entity.Image;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 import uk.co.senab.photoview.PhotoView;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * ImageFragment
@@ -46,6 +47,17 @@ public class ImageFragment extends Fragment {
 
     private SupportAnimator mSupportAnimator;
 
+    private PhotoViewAttacher.OnViewTapListener mOnViewTapListener = new PhotoViewAttacher.OnViewTapListener() {
+        @Override
+        public void onViewTap(View view, float x, float y) {
+            Fragment fragment = getParentFragment();
+            if (fragment != null && fragment instanceof ImagePreviewFragment) {
+                ImagePreviewFragment previewFragment = (ImagePreviewFragment) fragment;
+                previewFragment.toggleHideyBar();
+            }
+        }
+    };
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,6 +73,7 @@ public class ImageFragment extends Fragment {
             photoView = new ImageView(getContext());
         } else {
             photoView = new PhotoView(getContext());
+            ((PhotoView) photoView).getIPhotoViewImplementation().setOnViewTapListener(mOnViewTapListener);
         }
         layout.addView(photoView, 0,
                 new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
