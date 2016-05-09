@@ -29,7 +29,7 @@ public interface PhotoPickerContract {
 
         void filterFolderImage(int position);
 
-        boolean isMaxImageSelected(SparseBooleanArray array);
+        boolean isMaxImageSelected(Context context, SparseBooleanArray array);
 
         ArrayList<String> getSelectedImagePath();
 
@@ -48,7 +48,7 @@ public interface PhotoPickerContract {
 
         void changeGalleryName(String categoryName);
 
-        void showToast(int message);
+        void showToast(String message);
 
         void takePhoto();
 

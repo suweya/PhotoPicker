@@ -49,14 +49,14 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<ViewHolder>
 
     public PhotoPickerAdapter(@NonNull Context context,
                               @NonNull  ArrayList<Image> images,
-                              boolean showCameraGrid,
                               @NonNull  PhotoCheckListener listener,
                               @NonNull PhotoPickerContract.View view,
                               @NonNull PhotoPickerContract.Presenter presenter) {
         mContext = context;
         mImages = images;
         mLayoutInflater = LayoutInflater.from(context);
-        mShowCameraGrid = showCameraGrid;
+        mShowCameraGrid = ImageData.getInstance().isShowCameraGrid();
+
         mPhotoCheckListener = listener;
         mPhotoPickerView = view;
         mPhotoPickerPresenter = presenter;
@@ -111,7 +111,7 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<ViewHolder>
         int id = v.getId();
         if (id == R.id.fl_check_mark) {
 
-            if (!mPhotoPickerPresenter.isMaxImageSelected(mCheckedArray)) {
+            if (!mPhotoPickerPresenter.isMaxImageSelected(mContext, mCheckedArray)) {
                 AppCompatImageView imageView = (AppCompatImageView) v.getTag();
                 View mask = (View) imageView.getTag();
                 int position = (int) mask.getTag();

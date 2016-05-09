@@ -30,7 +30,6 @@ import rx.schedulers.Schedulers;
  */
 public class PhotoPickerPresenter implements PhotoPickerContract.Presenter {
 
-    public static final int MAX_IMAGE_SELECTED = 9;
     public static final int DEFAULT_CAMERA_GRID_POSITION = 0;
     private static final int REQUEST_TAKE_PHOTO = 20;
 
@@ -97,9 +96,10 @@ public class PhotoPickerPresenter implements PhotoPickerContract.Presenter {
     }
 
     @Override
-    public boolean isMaxImageSelected(SparseBooleanArray array) {
-        if (array != null && array.size() >= MAX_IMAGE_SELECTED) {
-            mView.showToast(R.string.max_images);
+    public boolean isMaxImageSelected(Context context, SparseBooleanArray array) {
+        int maxImageNum = ImageData.getInstance().getMaxImageNum();
+        if (array != null && array.size() >= maxImageNum) {
+            mView.showToast(String.format(context.getString(R.string.max_images), maxImageNum));
             return true;
         }
         return false;

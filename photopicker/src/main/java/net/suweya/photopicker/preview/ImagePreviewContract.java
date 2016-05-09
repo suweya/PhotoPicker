@@ -1,5 +1,6 @@
 package net.suweya.photopicker.preview;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 
@@ -17,12 +18,12 @@ public interface ImagePreviewContract {
     interface Presenter extends BasePresenter {
         void filterCheckedImageList(Bundle bundle);
 
-        boolean isMaxImageSelected(SparseBooleanArray array);
+        boolean isMaxImageSelected(Context context, SparseBooleanArray array);
     }
 
     interface View {
         void setUpViewPager(ArrayList<Image> images, int position);
 
-        void showToast(int message);
+        void showToast(String message);
     }
 }

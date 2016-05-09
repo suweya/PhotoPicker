@@ -20,11 +20,20 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
     private static final String KEY_SHOW_CAMERA = "SHOW_CAMERA";
     public static final String KEY_SELECTED_DATA = "SELECTED_DATA";
+    public static final String KEY_MAX_IMAGE_NUM = "MAX_IMAGE_NUM";
     public static final int REQUEST_CODE_PHOTO_PICKER = 10;
+    public static final int DEFAULT_MAX_IMAGE_NUM = 9;
 
     public static void start(Activity context, boolean showCamera) {
         Intent starter = new Intent(context, PhotoPickerActivity.class);
         starter.putExtra(KEY_SHOW_CAMERA, showCamera);
+        context.startActivityForResult(starter, REQUEST_CODE_PHOTO_PICKER);
+    }
+
+    public static void start(Activity context, boolean showCamera, int maxImageNum) {
+        Intent starter = new Intent(context, PhotoPickerActivity.class);
+        starter.putExtra(KEY_SHOW_CAMERA, showCamera);
+        starter.putExtra(KEY_MAX_IMAGE_NUM, maxImageNum);
         context.startActivityForResult(starter, REQUEST_CODE_PHOTO_PICKER);
     }
 
@@ -48,10 +57,10 @@ public class PhotoPickerActivity extends AppCompatActivity {
         PhotoPickerFragment fragment = (PhotoPickerFragment) getSupportFragmentManager().findFragmentById(R.id.container);
         if (fragment == null) {
             boolean showCamera = getIntent().getBooleanExtra(KEY_SHOW_CAMERA, false);
-            fragment = PhotoPickerFragment.newInstance(showCamera);
+            int maxImageNum = getIntent().getIntExtra(KEY_MAX_IMAGE_NUM, DEFAULT_MAX_IMAGE_NUM);
+            fragment = PhotoPickerFragment.newInstance(showCamera, maxImageNum);
             getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
         }
-
 
         final PhotoPickerFragment finalFragment = fragment;
         mBtnSend.setOnClickListener(new View.OnClickListener() {
@@ -76,10 +85,10 @@ public class PhotoPickerActivity extends AppCompatActivity {
         finish();
     }
 
-    public void modifySendButtonNum(int num) {
+    public void modifySendButtonNum(int num, int max) {
         boolean enable = num != 0;
         mBtnSend.setEnabled(enable);
-        mBtnSend.setText(enable ? String.format(getString(R.string.send_count), num) : getString(R.string.send));
+        mBtnSend.setText(enable ? String.format(getString(R.string.send_count), num, max) : getString(R.string.send));
     }
 
     @Override
