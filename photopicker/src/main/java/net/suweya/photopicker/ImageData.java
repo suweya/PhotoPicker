@@ -54,4 +54,26 @@ public class ImageData {
     public void setCheckedArray(SparseBooleanArray checkedArray) {
         mCheckedArrayRef = new WeakReference<>(checkedArray);
     }
+
+    /**
+     * ShowCameraGrid & MaxImageNum
+     */
+    private boolean mShowCameraGrid;
+    private int mMaxImageNum;
+
+    public void setMaxImageNum(int maxImageNum) {
+        mMaxImageNum = maxImageNum;
+    }
+
+    public int getMaxImageNum() {
+        return mMaxImageNum;
+    }
+
+    public void setShowCameraGrid(boolean showCameraGrid) {
+        mShowCameraGrid = showCameraGrid;
+    }
+
+    public boolean isShowCameraGrid() {
+        return mShowCameraGrid;
+    }
 }

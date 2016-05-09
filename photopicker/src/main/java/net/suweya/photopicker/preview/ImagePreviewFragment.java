@@ -148,14 +148,14 @@ public class ImagePreviewFragment extends BaseFragment<ImagePreviewContract.Pres
     }
 
     @Override
-    public void showToast(int message) {
+    public void showToast(String message) {
         Toast.makeText(getContext().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     private void modifyCheckStatus(boolean value, Image image) {
         if (mCheckedArray != null) {
             if (value) {
-                boolean allow = !mPresenter.isMaxImageSelected(mCheckedArray);
+                boolean allow = !mPresenter.isMaxImageSelected(getContext(), mCheckedArray);
                 if (allow) {
                     mCheckedArray.put(image.position, true);
                     image.selected = true;

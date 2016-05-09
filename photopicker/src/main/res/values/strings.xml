@@ -6,9 +6,9 @@
     <string name="photo_unit">Unit</string>
     <string name="selected">Select</string>
     <string name="photo_picker">Photo Picker</string>
-    <string name="max_images">Up to 9 pictures can only choose</string>
+    <string name="max_images">Up to %d pictures can only choose</string>
     <string name="send_default">Send</string>
 
     <string name="send">Send</string>
-    <string name="send_count">Send(%d/9)</string>
+    <string name="send_count">Send(%1$d/%2$d)</string>
 </resources>

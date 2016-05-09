@@ -1,5 +1,6 @@
 package net.suweya.photopicker.preview;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 
@@ -51,9 +52,10 @@ public class ImagePreviewPresenter implements ImagePreviewContract.Presenter {
     }
 
     @Override
-    public boolean isMaxImageSelected(SparseBooleanArray array) {
-        if (array != null && array.size() >= 9) {
-            mView.showToast(R.string.max_images);
+    public boolean isMaxImageSelected(Context context, SparseBooleanArray array) {
+        int maxImageNum = ImageData.getInstance().getMaxImageNum();
+        if (array != null && array.size() >= maxImageNum) {
+            mView.showToast(String.format(context.getString(R.string.max_images), maxImageNum));
             return true;
         }
         return false;

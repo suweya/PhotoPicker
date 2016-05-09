@@ -45,10 +45,11 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
     public static final int SPAN_COUNT = 3;
     private static final String KEY_SHOW_CAMERA_GRID = "SHOW_CAMERA_GRID";
 
-    public static PhotoPickerFragment newInstance(boolean showCameraGrid) {
+    public static PhotoPickerFragment newInstance(boolean showCameraGrid, int maxImageNum) {
 
         Bundle args = new Bundle();
         args.putBoolean(KEY_SHOW_CAMERA_GRID, showCameraGrid);
+        args.putInt(PhotoPickerActivity.KEY_MAX_IMAGE_NUM, maxImageNum);
 
         PhotoPickerFragment fragment = new PhotoPickerFragment();
         fragment.setArguments(args);
@@ -56,7 +57,6 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
     }
 
     private RecyclerView mRecyclerView;
-    private boolean mShowCameraGrid;
     private ListPopupWindow mFolderPopupWindow;
     private View mPopupAnchorView;
     private Button mPreviewButton;
@@ -75,7 +75,11 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
         super.onCreate(savedInstanceState);
         // improve glide memory category
         Glide.get(getContext()).setMemoryCategory(MemoryCategory.HIGH);
-        mShowCameraGrid = getArguments().getBoolean(KEY_SHOW_CAMERA_GRID);
+        boolean showCameraGrid = getArguments().getBoolean(KEY_SHOW_CAMERA_GRID);
+        int maxImageNum = getArguments().getInt(PhotoPickerActivity.KEY_MAX_IMAGE_NUM,
+                PhotoPickerActivity.DEFAULT_MAX_IMAGE_NUM);
+        ImageData.getInstance().setMaxImageNum(maxImageNum);
+        ImageData.getInstance().setShowCameraGrid(showCameraGrid);
     }
 
     @Nullable
@@ -133,14 +137,14 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
     }
 
     @Override
-    public void showToast(int message) {
+    public void showToast(String message) {
         Toast.makeText(getContext().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showGallery(ArrayList<Image> images) {
         ImageData.getInstance().setAllImages(images);
-        PhotoPickerAdapter adapter = new PhotoPickerAdapter(getContext(), images, mShowCameraGrid,
+        PhotoPickerAdapter adapter = new PhotoPickerAdapter(getContext(), images,
                 new PhotoPickerAdapter.PhotoCheckListener() {
                     @Override
                     public void onPhotoCheck(int count) {
@@ -168,7 +172,7 @@ public class PhotoPickerFragment extends BaseFragment<PhotoPickerContract.Presen
         mPreviewButton.setEnabled(enable);
 
         // update send button num
-        mPhotoPickerActivity.modifySendButtonNum(count);
+        mPhotoPickerActivity.modifySendButtonNum(count, ImageData.getInstance().getMaxImageNum());
     }
 
     @Override
