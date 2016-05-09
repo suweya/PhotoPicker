@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 /**
- * @link [https://github.com/chrisbanes/PhotoView/issues/31]
+ * https://github.com/chrisbanes/PhotoView/issues/31
  */
 public class ViewPagerFixed extends android.support.v4.view.ViewPager {
 
