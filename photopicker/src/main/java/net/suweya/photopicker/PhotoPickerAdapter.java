@@ -111,28 +111,31 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<ViewHolder>
         int id = v.getId();
         if (id == R.id.fl_check_mark) {
 
-            if (!mPhotoPickerPresenter.isMaxImageSelected(mContext, mCheckedArray)) {
-                AppCompatImageView imageView = (AppCompatImageView) v.getTag();
-                View mask = (View) imageView.getTag();
-                int position = (int) mask.getTag();
+            AppCompatImageView imageView = (AppCompatImageView) v.getTag();
+            View mask = (View) imageView.getTag();
+            int position = (int) mask.getTag();
 
-                Image image = mImages.get(position);
-                boolean value = !image.selected;
-                mask.setVisibility(value ? View.VISIBLE : View.GONE);
-                imageView.setBackgroundResource(value ? R.drawable.ic_check_box_black_24dp :
-                R.drawable.ic_check_box_outline_blank_black_24dp);
-                image.selected = value;
+            Image image = mImages.get(position);
+            boolean value = !image.selected;
 
-                //mSelectedCount = value ? mSelectedCount+1 : mSelectedCount-1;
-
-                if (value) {
-                    mCheckedArray.put(image.position, true);
-                } else {
-                    mCheckedArray.delete(image.position);
-                }
-
-                mPhotoCheckListener.onPhotoCheck(mCheckedArray.size());
+            if (value && mPhotoPickerPresenter.isMaxImageSelected(mContext, mCheckedArray)) {
+                return;
             }
+
+            mask.setVisibility(value ? View.VISIBLE : View.GONE);
+            imageView.setBackgroundResource(value ? R.drawable.ic_check_box_black_24dp :
+                    R.drawable.ic_check_box_outline_blank_black_24dp);
+            image.selected = value;
+
+            //mSelectedCount = value ? mSelectedCount+1 : mSelectedCount-1;
+
+            if (value) {
+                mCheckedArray.put(image.position, true);
+            } else {
+                mCheckedArray.delete(image.position);
+            }
+
+            mPhotoCheckListener.onPhotoCheck(mCheckedArray.size());
 
         } else if (id == R.id.item_view) {
             int position = (int) v.getTag();
