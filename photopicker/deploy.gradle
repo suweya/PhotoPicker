@@ -1,0 +1,83 @@
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+group = POM_GROUP_ID
+version = POM_VERSION
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                name BINTRAY_PKG_NAME
+                // Add your description here
+                description POM_DESCRIPTION
+                url POM_SITE_URL
+
+                groupId POM_GROUP_ID
+                artifactId 'photopicker'
+                version POM_VERSION
+
+                // Set your license
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id DEV_ID        //填写的一些基本信息
+                        name DEV_NAME
+                        email DEV_EMAIL
+                    }
+                }
+                scm {
+                    connection POM_GIT_URL
+                    developerConnection POM_GIT_URL
+                    url POM_SITE_URL
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+task javadoc(type: Javadoc) {
+    options.encoding = "utf-8"
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+// Bintray
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("BINTRAY_USER")
+    key = properties.getProperty("BINTRAY_KEY")
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        name = BINTRAY_PKG_NAME    //发布到JCenter上的项目名字
+        websiteUrl = POM_SITE_URL
+        vcsUrl = POM_GIT_URL
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
+}

@@ -45,30 +45,4 @@ dependencies {
     }
 }
 
-ext {
-    bintrayRepo = 'maven'
-    bintrayName = BINTRY_NAME
-
-    publishedGroupId = GROUP_ID
-
-    libraryName = LIBRARY_NAME
-    artifact = ARTIFACT_NAME
-
-    libraryDescription = POM_DESCRIPTION
-
-    siteUrl = SITE_URL
-    gitUrl = GIT_URL
-
-    libraryVersion = POM_VERSION
-
-    developerId = DEV_ID
-    developerName = DEV_NAME
-    developerEmail = DEV_EMAIL
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
-
-apply from: 'bintray-script/install.gradle'
-apply from: 'bintray-script/bintray.gradle'
+apply from: 'deploy.gradle'
